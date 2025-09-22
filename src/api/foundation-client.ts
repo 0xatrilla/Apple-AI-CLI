@@ -151,6 +151,8 @@ Request: ${options.prompt}`;
    * Create Swift script to use Apple Intelligence
    */
   private createSwiftScript(prompt: string, options: CodeGenerationOptions): string {
+    const language = options.language || "typescript";
+    
     return `
 import Foundation
 import NaturalLanguage
@@ -206,10 +208,10 @@ func generateCode(prompt: String, language: String) -> String {
 }
 
 let prompt = """
-\\(prompt)
+${prompt}
 """
 
-let language = "\\(options.language ?? "typescript")"
+let language = "${language}"
 let result = generateCode(prompt: prompt, language: language)
 print(result)
 `;

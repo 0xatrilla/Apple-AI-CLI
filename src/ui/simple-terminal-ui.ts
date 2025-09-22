@@ -243,6 +243,7 @@ export class SimpleTerminalUI {
         onError: (error: Error) => {
           console.log();
           console.log(chalk.red(`❌ Generation failed: ${error.message}`));
+          this.isGenerating = false;
         },
       });
       
