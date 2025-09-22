@@ -21,10 +21,12 @@ export class CLIParser {
       .name('apple-code')
       .description('Apple Code Assistant - Generate code using Apple Foundation Models')
       .version('1.0.0')
+      .allowUnknownOption() // Allow unknown options to prevent help from showing
+      .exitOverride() // Override default exit behavior
       .option('-p, --prompt <prompt>', 'Code generation prompt')
       .option('-l, --language <language>', 'Programming language (typescript, javascript, python, etc.)')
       .option('-o, --output <file>', 'Output file path')
-      .option('-i, --interactive', 'Interactive mode')
+      .option('-i, --interactive', 'Interactive mode (default when no prompt provided)')
       .option('-c, --config <file>', 'Configuration file path')
       .option('-m, --model <model>', 'Apple Foundation Model to use')
       .option('-t, --temperature <number>', 'Temperature for code generation (0-2)', '0.7')
@@ -69,8 +71,85 @@ export class CLIParser {
    * Parse CLI arguments
    */
   public parse(args: string[]): CLIArgs {
-    this.program.parse(args, { from: 'node' });
-    const options = this.program.opts();
+    // Check for interactive mode cases first
+    if (args.length === 0 || (args.length === 1 && (args[0] === '-i' || args[0] === '--interactive'))) {
+      // Return default args for interactive mode
+      return {
+        prompt: undefined,
+        language: undefined,
+        output: undefined,
+        interactive: true,
+        config: undefined,
+        model: undefined,
+        temperature: 0.7,
+        maxTokens: 4000,
+        save: false,
+        copy: false,
+        preview: false,
+        edit: undefined,
+        context: undefined,
+        debug: false,
+        verbose: false,
+      };
+    }
+    
+    // Check if this is a subcommand
+    const subcommands = ['config', 'models', 'languages', 'test'];
+    const hasSubcommand = args.some(arg => subcommands.includes(arg));
+    
+    if (hasSubcommand) {
+      // Let Commander.js handle subcommands
+      this.program.parse(args, { from: 'node' });
+      // Return empty args since subcommand was handled
+      return {
+        prompt: undefined,
+        language: undefined,
+        output: undefined,
+        interactive: false,
+        config: undefined,
+        model: undefined,
+        temperature: 0.7,
+        maxTokens: 4000,
+        save: false,
+        copy: false,
+        preview: false,
+        edit: undefined,
+        context: undefined,
+        debug: false,
+        verbose: false,
+      };
+    }
+    
+    // Parse regular options
+    let options;
+    try {
+      this.program.parse(args, { from: 'node' });
+      options = this.program.opts();
+    } catch (error) {
+      // If parsing fails, try to extract options manually
+      const manualOptions = this.parseOptionsManually(args);
+      if (manualOptions.prompt) {
+        return manualOptions;
+      }
+      // If no prompt found, return default interactive mode
+      return {
+        prompt: undefined,
+        language: undefined,
+        output: undefined,
+        interactive: true,
+        config: undefined,
+        model: undefined,
+        temperature: 0.7,
+        maxTokens: 4000,
+        save: false,
+        copy: false,
+        preview: false,
+        edit: undefined,
+        context: undefined,
+        debug: false,
+        verbose: false,
+      };
+    }
     
     return {
       prompt: options.prompt,
@@ -97,6 +176,108 @@ export class CLIParser {
   private handleMainCommand(): void {
     // Main command logic is handled by the parser
     // This method is called when the main command is executed
+  }
+
+  /**
+   * Manually parse options when Commander.js fails
+   */
+  private parseOptionsManually(args: string[]): CLIArgs {
+    const options: any = {};
+    
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i];
+      
+      switch (arg) {
+        case '-p':
+        case '--prompt':
+          options.prompt = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '-l':
+        case '--language':
+          options.language = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '-o':
+        case '--output':
+          options.output = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '-i':
+        case '--interactive':
+          options.interactive = true;
+          break;
+        case '-c':
+        case '--config':
+          options.config = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '-m':
+        case '--model':
+          options.model = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '-t':
+        case '--temperature':
+          options.temperature = parseFloat(args[i + 1]);
+          i++; // Skip next argument
+          break;
+        case '--max-tokens':
+          options.maxTokens = parseInt(args[i + 1]);
+          i++; // Skip next argument
+          break;
+        case '-s':
+        case '--save':
+          options.save = true;
+          break;
+        case '--copy':
+          options.copy = true;
+          break;
+        case '--preview':
+          options.preview = true;
+          break;
+        case '-e':
+        case '--edit':
+          options.edit = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '--context':
+          options.context = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '--theme':
+          options.theme = args[i + 1];
+          i++; // Skip next argument
+          break;
+        case '--no-color':
+          options.noColor = true;
+          break;
+        case '--verbose':
+          options.verbose = true;
+          break;
+        case '--debug':
+          options.debug = true;
+          break;
+      }
+    }
+    
+    return {
+      prompt: options.prompt,
+      language: options.language,
+      output: options.output,
+      interactive: options.interactive || false,
+      config: options.config,
+      model: options.model,
+      temperature: options.temperature || 0.7,
+      maxTokens: options.maxTokens || 4000,
+      save: options.save || false,
+      copy: options.copy || false,
+      preview: options.preview || false,
+      edit: options.edit,
+      context: options.context,
+      debug: options.debug || false,
+      verbose: options.verbose || false,
+    };
   }
 
   /**

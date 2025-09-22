@@ -72,13 +72,11 @@ export class CLIHandler {
       }
 
       // Handle different command modes
-      if (args.interactive) {
-        await this.handleModernUI();
-      } else if (args.prompt) {
+      if (args.prompt) {
         await this.handleDirectMode(args);
       } else {
-        // Show help if no arguments provided
-        this.showHelp();
+        // Default to interactive UI mode
+        await this.handleModernUI();
       }
     } catch (error) {
       this.logger.error(`Execution failed: ${error}`);
@@ -412,10 +410,10 @@ export class CLIHandler {
     console.log(chalk.blue.bold('\n🍎 Apple Code Assistant\n'));
     console.log(chalk.white('Generate code using Apple Foundation Models\n'));
     console.log(chalk.yellow('Usage:'));
-    console.log(chalk.white('  apple-code [options]'));
-    console.log(chalk.white('  apple-code -i                    # Interactive mode'));
-    console.log(chalk.white('  apple-code -p "create a React component"'));
-    console.log(chalk.white('  apple-code -p "sort array" -l python --save\n'));
+    console.log(chalk.white('  apple-code                       # Interactive mode (default)'));
+    console.log(chalk.white('  apple-code -p "create a React component"  # Direct mode'));
+    console.log(chalk.white('  apple-code -p "sort array" -l python --save'));
+    console.log(chalk.white('  apple-code -i                    # Explicit interactive mode\n'));
     console.log(chalk.yellow('Options:'));
     console.log(chalk.white('  -p, --prompt <prompt>           Code generation prompt'));
     console.log(chalk.white('  -l, --language <language>       Programming language'));
