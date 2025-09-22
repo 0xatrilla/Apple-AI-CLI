@@ -244,14 +244,7 @@ outputFormat: terminal
 theme: dark
 maxTokens: 4000
 temperature: 0.7
-```
-
-## 📚 Documentation
-
-- [📖 Installation Guide](docs/INSTALLATION.md) - Detailed setup instructions
-- [🔌 API Documentation](docs/API.md) - Complete API reference
-- [❓ FAQ](docs/FAQ.md) - Frequently asked questions
-- [🏗️ Project Structure](PROJECT_STRUCTURE.md) - Detailed architecture overview
+``
 
 ## 🎨 UI Features
 
