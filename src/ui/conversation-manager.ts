@@ -60,16 +60,43 @@ export class ConversationManager {
 
       for (const file of sessionFiles) {
         const filePath = path.join(this.dataDir, file);
-        const sessionData = await fs.readJson(filePath);
         
-        // Convert timestamp strings back to Date objects
-        sessionData.createdAt = new Date(sessionData.createdAt);
-        sessionData.updatedAt = new Date(sessionData.updatedAt);
-        sessionData.messages.forEach((msg: any) => {
-          msg.timestamp = new Date(msg.timestamp);
-        });
+        try {
+          // Check if file is empty or corrupted
+          const stats = await fs.stat(filePath);
+          if (stats.size === 0) {
+            console.warn(`Skipping empty session file: ${file}`);
+            await fs.remove(filePath); // Remove empty file
+            continue;
+          }
 
-        this.sessions.set(sessionData.id, sessionData);
+          const sessionData = await fs.readJson(filePath);
+          
+          // Validate session data structure
+          if (!sessionData || !sessionData.id || !sessionData.messages) {
+            console.warn(`Skipping corrupted session file: ${file}`);
+            await fs.remove(filePath); // Remove corrupted file
+            continue;
+          }
+          
+          // Convert timestamp strings back to Date objects
+          sessionData.createdAt = new Date(sessionData.createdAt);
+          sessionData.updatedAt = new Date(sessionData.updatedAt);
+          sessionData.messages.forEach((msg: any) => {
+            msg.timestamp = new Date(msg.timestamp);
+          });
+
+          this.sessions.set(sessionData.id, sessionData);
+        } catch (fileError) {
+          console.warn(`Failed to load session file ${file}:`, fileError);
+          // Try to remove corrupted file
+          try {
+            await fs.remove(filePath);
+            console.log(`Removed corrupted session file: ${file}`);
+          } catch (removeError) {
+            console.warn(`Failed to remove corrupted file ${file}:`, removeError);
+          }
+        }
       }
     } catch (error) {
       console.warn('Failed to load conversation sessions:', error);
@@ -241,14 +268,27 @@ export class ConversationManager {
   }
 
   /**
-   * Save session to disk
+   * Save session to disk with atomic write to prevent corruption
    */
   private async saveSession(session: ConversationSession): Promise<void> {
     try {
       const filePath = path.join(this.dataDir, `${session.id}.json`);
-      await fs.writeJson(filePath, session, { spaces: 2 });
+      const tempPath = path.join(this.dataDir, `${session.id}.tmp`);
+      
+      // Write to temporary file first
+      await fs.writeJson(tempPath, session, { spaces: 2 });
+      
+      // Atomically move temp file to final location
+      await fs.move(tempPath, filePath, { overwrite: true });
     } catch (error) {
       console.error('Failed to save session:', error);
+      // Clean up temp file if it exists
+      try {
+        const tempPath = path.join(this.dataDir, `${session.id}.tmp`);
+        await fs.remove(tempPath);
+      } catch (cleanupError) {
+        // Ignore cleanup errors
+      }
     }
   }
 
