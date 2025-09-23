@@ -132,6 +132,14 @@ export class SimpleTerminalUI {
         
       } catch (error) {
         console.log(chalk.red(`❌ Error: ${error}`));
+        // Reset generating flag in case of error
+        this.isGenerating = false;
+        
+        // If readline is closed, break the loop
+        if (error instanceof Error && error.message.includes('readline was closed')) {
+          console.log(chalk.yellow('Interface closed. Exiting...'));
+          break;
+        }
       }
     }
   }
@@ -140,12 +148,21 @@ export class SimpleTerminalUI {
    * Prompt user for input
    */
   private promptUser(): Promise<string> {
-    return new Promise((resolve) => {
-      const prompt = this.isGenerating 
-        ? chalk.yellow('🔄 Generating...') 
-        : chalk.blue('💬 You:');
-      
-      this.rl.question(`${prompt} `, resolve);
+    return new Promise((resolve, reject) => {
+      try {
+        // Check if readline is still open (readline doesn't have a closed property)
+        // We'll handle this in the catch block instead
+        
+        const prompt = this.isGenerating 
+          ? chalk.yellow('🔄 Generating...') 
+          : chalk.blue('💬 You:');
+        
+        this.rl.question(`${prompt} `, (answer) => {
+          resolve(answer);
+        });
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 
@@ -239,6 +256,9 @@ export class SimpleTerminalUI {
             'assistant',
             { language: result.language, tokensUsed: result.metadata?.tokensUsed }
           );
+          
+          // Reset generating flag
+          this.isGenerating = false;
         },
         onError: (error: Error) => {
           console.log();

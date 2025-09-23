@@ -293,12 +293,12 @@ export class CLIHandler {
     const spinner = ora('Generating code...').start();
     try {
       const result = await this.client.generateCode(options);
-      spinner.stop();
+      spinner.succeed('Code generated successfully!');
       
       this.logger.debug(`Code generated successfully. Tokens used: ${result.metadata?.tokensUsed}`);
       return result;
     } catch (error) {
-      spinner.stop();
+      spinner.fail('Code generation failed');
       throw new Error(`Code generation failed: ${error}`);
     }
   }
@@ -309,7 +309,8 @@ export class CLIHandler {
   private async handleOutput(result: CodeResult, options: any): Promise<void> {
     const { save, copy, preview, outputFile } = options;
 
-    if (preview) {
+    // Always show the code in direct mode (unless explicitly disabled)
+    if (preview !== false) {
       this.previewCode(result);
     }
 

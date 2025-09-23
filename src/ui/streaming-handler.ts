@@ -96,9 +96,9 @@ export class StreamingHandler extends EventEmitter {
     const lines = code.split('\n');
     const chunks: string[] = [];
     
-    // Group lines into chunks of 2-5 lines
-    for (let i = 0; i < lines.length; i += Math.floor(Math.random() * 4) + 2) {
-      const chunkLines = lines.slice(i, i + Math.floor(Math.random() * 4) + 2);
+    // Group lines into chunks of 2-3 lines without overlap
+    for (let i = 0; i < lines.length; i += 3) {
+      const chunkLines = lines.slice(i, i + 3);
       chunks.push(chunkLines.join('\n') + '\n');
     }
     

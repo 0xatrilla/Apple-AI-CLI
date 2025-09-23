@@ -85,7 +85,7 @@ export class CLIParser {
         maxTokens: 4000,
         save: false,
         copy: false,
-        preview: false,
+        preview: undefined,
         edit: undefined,
         context: undefined,
         debug: false,
@@ -112,7 +112,7 @@ export class CLIParser {
         maxTokens: 4000,
         save: false,
         copy: false,
-        preview: false,
+        preview: undefined,
         edit: undefined,
         context: undefined,
         debug: false,
@@ -120,53 +120,29 @@ export class CLIParser {
       };
     }
     
-    // Parse regular options
-    let options;
-    try {
-      this.program.parse(args, { from: 'node' });
-      options = this.program.opts();
-    } catch (error) {
-      // If parsing fails, try to extract options manually
-      const manualOptions = this.parseOptionsManually(args);
-      if (manualOptions.prompt) {
-        return manualOptions;
-      }
-      // If no prompt found, return default interactive mode
-      return {
-        prompt: undefined,
-        language: undefined,
-        output: undefined,
-        interactive: true,
-        config: undefined,
-        model: undefined,
-        temperature: 0.7,
-        maxTokens: 4000,
-        save: false,
-        copy: false,
-        preview: false,
-        edit: undefined,
-        context: undefined,
-        debug: false,
-        verbose: false,
-      };
+    // For direct mode, use manual parsing to avoid Commander.js help issues
+    const manualOptions = this.parseOptionsManually(args);
+    if (manualOptions.prompt) {
+      return manualOptions;
     }
     
+    // If no prompt found, return default interactive mode
     return {
-      prompt: options.prompt,
-      language: options.language,
-      output: options.output,
-      interactive: options.interactive,
-      config: options.config,
-      model: options.model,
-      temperature: parseFloat(options.temperature),
-      maxTokens: parseInt(options.maxTokens),
-      save: options.save,
-      copy: options.copy,
-      preview: options.preview,
-      edit: options.edit,
-      context: options.context,
-      debug: options.debug,
-      verbose: options.verbose,
+      prompt: undefined,
+      language: undefined,
+      output: undefined,
+      interactive: true,
+      config: undefined,
+      model: undefined,
+      temperature: 0.7,
+      maxTokens: 4000,
+      save: false,
+      copy: false,
+      preview: undefined,
+      edit: undefined,
+      context: undefined,
+      debug: false,
+      verbose: false,
     };
   }
 
@@ -272,7 +248,7 @@ export class CLIParser {
       maxTokens: options.maxTokens || 4000,
       save: options.save || false,
       copy: options.copy || false,
-      preview: options.preview || false,
+      preview: options.preview,
       edit: options.edit,
       context: options.context,
       debug: options.debug || false,

@@ -39,8 +39,20 @@ export class ConversationManager {
 
   constructor() {
     this.dataDir = path.join(os.homedir(), '.apple-code-assistant', 'conversations');
-    this.ensureDataDirectory();
+    // Initialize directory synchronously
+    this.initializeDataDirectory();
     this.loadSessions();
+  }
+
+  /**
+   * Initialize data directory synchronously
+   */
+  private initializeDataDirectory(): void {
+    try {
+      fs.ensureDirSync(this.dataDir);
+    } catch (error) {
+      console.warn('Failed to create data directory:', error);
+    }
   }
 
   /**
@@ -272,6 +284,9 @@ export class ConversationManager {
    */
   private async saveSession(session: ConversationSession): Promise<void> {
     try {
+      // Ensure directory exists before saving
+      await this.ensureDataDirectory();
+      
       const filePath = path.join(this.dataDir, `${session.id}.json`);
       const tempPath = path.join(this.dataDir, `${session.id}.tmp`);
       
