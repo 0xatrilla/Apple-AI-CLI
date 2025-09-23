@@ -1,31 +1,26 @@
-# 🍎 Apple AI CLI
+# 🍎 Apple Code Assistant
 
 <div align="center">
 
-**A professional command-line tool powered by Apple Intelligence for on-device code generation**
+**A TypeScript CLI tool for code generation using Apple's Foundation Models**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![macOS](https://img.shields.io/badge/macOS-15+-silver.svg)](https://www.apple.com/macos/)
-
-*No API keys required • On-device AI • Professional CLI experience*
 
 </div>
 
 ## ✨ Features
 
-- **🍎 Apple Intelligence Integration** - Uses on-device AI models (no API keys required!)
-- **🎨 Modern Terminal UI** - Beautiful interface inspired by Gemini CLI with ASCII art branding
-- **⚡ Real-Time Streaming** - See code generated in real-time with streaming responses
-- **🌐 Multi-Language Support** - 25+ programming languages with syntax highlighting
+- **🍎 Apple Intelligence Integration** - Leverages on-device Apple AI models
+- **🎨 Modern Terminal UI** - Professional CLI interface with ASCII art branding
 - **💬 Conversation Management** - Persistent chat history and session management
-- **📁 File Operations** - Save, edit, and create files with generated code
+- **🌐 Multi-Language Support** - Code generation for 25+ programming languages
+- **📁 File Operations** - Save, edit, and manage generated code
 - **🎯 Syntax Highlighting** - Beautiful code display with highlight.js
 - **📋 Clipboard Integration** - Copy generated code to macOS clipboard
-- **🔧 Professional CLI** - Industry-standard command interface with Commander.js
-- **🛡️ Error Handling** - Robust error handling with graceful fallbacks
-- **⚙️ Configuration Management** - Flexible configuration via environment variables
+- **🔧 Professional CLI** - Built with Commander.js for robust command parsing
+- **🛡️ Error Handling** - Comprehensive error handling with graceful fallbacks
 
 ## 🚀 Quick Start
 
@@ -34,14 +29,13 @@
 - **macOS 15+** with Apple Intelligence support
 - **Node.js 18+**
 - **Apple Silicon Mac** (recommended for best performance)
-- **Swift** (for on-device code generation simulation)
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/0xatrilla/Apple-AI-CLI.git
-cd Apple-AI-CLI
+git clone https://github.com/yourusername/apple-code-assistant.git
+cd apple-code-assistant
 
 # Install dependencies
 npm install
@@ -85,11 +79,6 @@ apple-code -i
 ╚═╝  ╚═╝╚═╝     ╚═╝     ╚══════╝╚══════╝     ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝
                                                                              
 ASSISTANT
-
-Powered by Apple Intelligence
-┌─────────────────────────────────────────────────────────────┐
-│  🍎 On-Device AI  │  ✅ Ready  │  v1.0.0  │
-└─────────────────────────────────────────────────────────────┘
 
 💬 You: Create a React component for a todo list
 🤖 Assistant: [Generated TypeScript code with syntax highlighting]
@@ -135,19 +124,6 @@ apple-code -p "create API endpoint" --context "for Express.js application"
 - `--verbose` - Verbose output
 - `--debug` - Debug mode
 
-### Subcommands
-```bash
-# Configuration management
-apple-code config --set model=apple-foundation-model
-apple-code config --get defaultLanguage
-apple-code config --list
-
-# Utility commands
-apple-code models          # List available models
-apple-code languages       # List supported languages
-apple-code test           # Test Apple Intelligence connection
-```
-
 ## 🌐 Supported Languages
 
 - **TypeScript/JavaScript** - React, Node.js, Express, Vue, Angular
@@ -171,18 +147,18 @@ apple-code test           # Test Apple Intelligence connection
 ```
 src/
 ├── api/                    # Apple Intelligence integration
-│   └── foundation-client.ts    # On-device AI client with Swift simulation
+│   └── foundation-client.ts    # On-device AI client
 ├── cli/                    # Command-line interface
-│   ├── handler.ts              # Main CLI logic and command handling
+│   ├── handler.ts              # Main CLI logic
 │   ├── interactive.ts          # Legacy interactive CLI
 │   └── parser.ts               # Commander.js argument parsing
 ├── config/                 # Configuration management
 │   └── index.ts                # Environment variables and config files
 ├── ui/                     # Modern terminal UI
-│   ├── simple-terminal-ui.ts   # Main interactive UI with ASCII art
+│   ├── simple-terminal-ui.ts   # Main interactive UI
 │   ├── conversation-manager.ts # Chat history and session management
 │   ├── streaming-handler.ts    # Real-time streaming responses
-│   └── file-tree.ts            # File tree navigation (future feature)
+│   └── file-tree.ts            # File tree navigation
 ├── utils/                  # Utility functions
 │   ├── clipboard.ts            # macOS clipboard integration
 │   ├── file-operations.ts      # File I/O operations
@@ -233,18 +209,45 @@ APPLE_CODE_MAX_TOKENS=4000
 APPLE_CODE_TEMPERATURE=0.7
 ```
 
-### Configuration File
+## 🔒 Security & Privacy
 
-The tool automatically creates a configuration file at `~/.apple-code-assistant/config.yaml`:
+- **On-Device Processing** - All AI processing happens locally on your Mac
+- **No API Keys Required** - Uses Apple Intelligence directly
+- **No Data Transmission** - Code and prompts stay on your device
+- **Secure Configuration** - Config files stored in user's home directory
+- **Input Validation** - Prevents injection attacks and malformed input
 
-```yaml
-model: apple-foundation-model
-defaultLanguage: typescript
-outputFormat: terminal
-theme: dark
-maxTokens: 4000
-temperature: 0.7
-``
+## 🛠️ Development
+
+### Prerequisites
+- Node.js 18+
+- TypeScript 5+
+- npm or yarn
+- Swift (for on-device simulation)
+
+### Setup
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/apple-code-assistant.git
+cd apple-code-assistant
+
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Run in development mode
+npm run dev
+```
+
+### Scripts
+```bash
+npm run build      # Build TypeScript to JavaScript
+npm run dev        # Run with ts-node for development
+npm run start      # Run built JavaScript
+npm run clean      # Remove dist folder
+```
 
 ## 🎨 UI Features
 
@@ -261,95 +264,15 @@ temperature: 0.7
 - **File Operations** with save, edit, and create functionality
 - **Clipboard Integration** for macOS using clipboardy
 
-## 🛠️ Development
-
-### Prerequisites
-- Node.js 18+
-- TypeScript 5+
-- npm or yarn
-- Swift (for on-device simulation)
-
-### Setup
-```bash
-# Clone the repository
-git clone https://github.com/0xatrilla/Apple-AI-CLI.git
-cd Apple-AI-CLI
-
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Run in development mode
-npm run dev
-
-# Test the demo UI
-node demo-ui.js
-```
-
-### Scripts
-```bash
-npm run build      # Build TypeScript to JavaScript
-npm run dev        # Run with ts-node for development
-npm run start      # Run built JavaScript
-npm run lint       # Run ESLint
-npm run test       # Run tests
-```
-
-### Testing
-```bash
-# Test the demo UI
-node demo-ui.js
-
-# Test with sample prompt
-npm run dev -- -p "create a hello world function" -l typescript
-
-# Test interactive mode
-npm run dev -- -i
-```
-
-## 🔒 Security & Privacy
-
-- **On-Device Processing** - All AI processing happens locally on your Mac
-- **No API Keys Required** - Uses Apple Intelligence directly
-- **No Data Transmission** - Code and prompts stay on your device
-- **Secure Configuration** - Config files stored in user's home directory
-- **Input Validation** - Prevents injection attacks and malformed input
-
-## 🤝 Contributing
-
-We welcome contributions! Please read our contributing guidelines and submit pull requests for any improvements.
-
-### Development Guidelines
-
-1. **Follow TypeScript Best Practices** - Use strict typing and proper interfaces
-2. **Add Proper Error Handling** - Include try-catch blocks and graceful fallbacks
-3. **Include JSDoc Comments** - Document all public APIs and functions
-4. **Write Tests** - Add unit tests for new features and bug fixes
-5. **Update Documentation** - Keep README and docs up to date
-6. **Follow Code Style** - Use Prettier and ESLint configurations
-
-### How to Contribute
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Add tests if applicable
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- **Inspired by** [Gemini CLI](https://github.com/google-gemini/gemini-cli) for UI design
+- **Inspired by** industry-leading CLI applications
 - **Powered by** Apple Intelligence on-device models
 - **Built with** TypeScript, Node.js, and modern CLI tools
-- **UI Design** inspired by industry-leading CLI applications
 - **Dependencies**:
   - [Commander.js](https://github.com/tj/commander.js) for CLI parsing
   - [Chalk](https://github.com/chalk/chalk) for terminal styling
@@ -359,10 +282,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Repository**: [https://github.com/0xatrilla/Apple-AI-CLI](https://github.com/0xatrilla/Apple-AI-CLI)
-- **Issues**: [Report a bug](https://github.com/0xatrilla/Apple-AI-CLI/issues)
-- **Discussions**: [Join the conversation](https://github.com/0xatrilla/Apple-AI-CLI/discussions)
-- **Releases**: [Latest releases](https://github.com/0xatrilla/Apple-AI-CLI/releases)
+- **Repository**: [https://github.com/yourusername/apple-code-assistant](https://github.com/yourusername/apple-code-assistant)
+- **Issues**: [Report a bug](https://github.com/yourusername/apple-code-assistant/issues)
 
 ## 🚀 Roadmap
 
@@ -380,16 +301,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] File tree navigation and code preview
 - [ ] Plugin system for custom language support
 - [ ] Team collaboration features
-- [ ] VS Code extension
-- [ ] Web interface
-- [ ] Advanced code analysis and suggestions
 
 ### Future Enhancements 🔮
 - [ ] Multi-model support (different AI models)
 - [ ] Code review and optimization suggestions
 - [ ] Integration with popular development tools
 - [ ] Advanced conversation memory and context
-- [ ] Custom prompt templates and workflows
 
 ---
 
@@ -399,6 +316,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *No API keys required • On-device AI • Professional CLI experience*
 
-[⭐ Star this repository](https://github.com/0xatrilla/Apple-AI-CLI) • [🐛 Report Issues](https://github.com/0xatrilla/Apple-AI-CLI/issues) • [💬 Join Discussions](https://github.com/0xatrilla/Apple-AI-CLI/discussions)
+[⭐ Star this repository](https://github.com/yourusername/apple-code-assistant) • [🐛 Report Issues](https://github.com/yourusername/apple-code-assistant/issues)
 
 </div>
